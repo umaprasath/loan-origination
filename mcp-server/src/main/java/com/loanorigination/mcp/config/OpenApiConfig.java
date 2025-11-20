@@ -1,0 +1,30 @@
+package com.loanorigination.mcp.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfig {
+    
+    @Bean
+    public OpenAPI mcpServerOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("MCP Server API")
+                        .description("Model Context Protocol server for AI-driven loan origination orchestration. " +
+                                "This server exposes tools that AI agents can use to interact with the loan origination system.")
+                        .version("1.0.0")
+                        .contact(new Contact()
+                                .name("Loan Origination Team")
+                                .email("support@loanorigination.com"))
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("https://www.apache.org/licenses/LICENSE-2.0.html")));
+    }
+}
+
+

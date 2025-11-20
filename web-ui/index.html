@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application - AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="white"/>
+                    <path d="M16 8L24 12V20L16 24L8 20V12L16 8Z" stroke="black" stroke-width="2"/>
+                </svg>
+                <h1>Loan Origination AI</h1>
+            </div>
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Ready</span>
+                </div>
+                <a href="admin.html" class="link-admin">Manage Rules</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Interface -->
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant-message">
+                        <div class="message-icon">AI</div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI loan assistant. You can tell me about your loan needs in your own words.</p>
+                            <p><strong>Required:</strong> SSN (9 digits) and loan amount</p>
+                            <p><strong>Try these simple formats:</strong></p>
+                            <ul style="margin: 8px 0; padding-left: 20px;">
+                                <li>"123-45-6789 need $50,000"</li>
+                                <li>"123456789 loan 75000"</li>
+                                <li>"SSN: 345-67-8901, amount: $100,000"</li>
+                                <li>Or just type the 9-digit SSN and amount anywhere in your message!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-container">
+                    <textarea 
+                        id="chatInput" 
+                        class="chat-input" 
+                        placeholder="Describe your loan needs in natural language..."
+                        rows="3"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button id="clearBtn" class="btn-secondary">Clear</button>
+                        <button id="submitBtn" class="btn-primary">
+                            <span id="submitText">Submit Application</span>
+                            <span id="submitLoader" class="loader hidden"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Result Panel -->
+            <div class="result-panel" id="resultPanel" style="display: none; margin-top: 32px;">
+                <div class="result-header">
+                    <h2>Loan Decision</h2>
+                    <button id="closeResultBtn" class="close-btn">×</button>
+                </div>
+
+                <div class="result-content">
+                    <!-- Decision Status -->
+                    <div class="decision-status" id="decisionStatus">
+                        <div class="status-badge" id="statusBadge">PENDING</div>
+                        <p class="status-message" id="statusMessage">Processing your application...</p>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <label>Credit Score</label>
+                            <div class="metric-value" id="creditScore">---</div>
+                        </div>
+                        <div class="metric-card">
+                            <label>Loan Amount</label>
+                            <div class="metric-value" id="loanAmount">---</div>
+                        </div>
+                        <div class="metric-card">
+                            <label>Request ID</label>
+                            <div class="metric-value small" id="requestId">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Decision Reasoning -->
+                    <div class="reasoning-section" id="reasoningSection" style="display: none;">
+                        <h3>Decision Details</h3>
+                        <div class="reasoning-content" id="reasoningContent"></div>
+                    </div>
+
+                    <!-- Bureau Responses -->
+                    <div class="bureau-section" id="bureauSection" style="display: none;">
+                        <h3>Credit Bureau Reports</h3>
+                        <div class="bureau-grid" id="bureauGrid"></div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="result-actions">
+                        <button id="viewReasoningBtn" class="btn-secondary">View Full Reasoning</button>
+                        <button id="newApplicationBtn" class="btn-primary">New Application</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

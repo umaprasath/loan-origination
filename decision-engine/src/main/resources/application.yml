@@ -1,0 +1,57 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: decision-engine
+  datasource:
+    url: jdbc:h2:mem:decisiondb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.loanorigination.decisionengine: DEBUG
+
+# LLM Configuration
+llm:
+  enabled: ${LLM_ENABLED:true}
+  provider: ${LLM_PROVIDER:ollama}  # "openai" or "ollama"
+  api-key: ${OPENAI_API_KEY:}
+  model: ${LLM_MODEL:gpt-4}  # For OpenAI: gpt-4, gpt-3.5-turbo | For Ollama: llama2, mistral, etc.
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}  # Use 'localhost:11434' for host services, 'http://ollama:11434' if services run in Docker
+
+# Decision Mode: "rules", "llm", or "hybrid"
+decision:
+  mode: ${DECISION_MODE:rules}
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    enabled: true
+    use-root-path: false
+  show-actuator: false
+

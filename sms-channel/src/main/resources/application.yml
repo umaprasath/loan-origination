@@ -1,0 +1,25 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: sms-channel
+
+orchestrator:
+  base-url: http://localhost:8082
+  # Adjust if orchestrator runs on another port/service name in Docker
+
+twilio:
+  # Provide via environment variables in prod:
+  # TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_MESSAGING_SERVICE_SID
+  account-sid: ${TWILIO_ACCOUNT_SID:}
+  auth-token: ${TWILIO_AUTH_TOKEN:}
+  messaging-service-sid: ${TWILIO_MESSAGING_SERVICE_SID:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+

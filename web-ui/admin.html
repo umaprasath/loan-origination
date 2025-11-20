@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Configuration Admin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+    <div class="container admin-container">
+        <header class="header admin-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="white" />
+                    <path d="M16 8L24 12V20L16 24L8 20V12L16 8Z" stroke="black" stroke-width="2" />
+                </svg>
+                <div>
+                    <h1>Rule Configuration Admin</h1>
+                    <p class="subtitle">Manage business decision rules for the loan origination system</p>
+                </div>
+            </div>
+            <nav class="admin-nav">
+                <a href="index.html" class="btn-secondary">← Back to Loan Assistant</a>
+            </nav>
+        </header>
+
+        <main class="admin-main">
+            <section class="admin-card">
+                <div class="card-header">
+                    <div>
+                        <h2>Configured Rules</h2>
+                        <p class="card-subtitle">Review, edit, enable/disable, or delete existing rules</p>
+                    </div>
+                    <div class="card-actions">
+                        <button id="inferRulesBtn" class="btn-primary">Infer from Model</button>
+                        <button id="refreshRulesBtn" class="btn-secondary">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="rules-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Threshold</th>
+                                <th>Operator</th>
+                                <th>Priority</th>
+                                <th>Importance</th>
+                                <th>Status</th>
+                                <th>Source</th>
+                                <th>Confidence</th>
+                                <th>Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rulesTableBody">
+                            <tr>
+                                <td colspan="11" class="empty-state">Loading rules...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="admin-card">
+                <div class="card-header">
+                    <div>
+                        <h2 id="formTitle">Create New Rule</h2>
+                        <p class="card-subtitle">Define thresholds and descriptions that business users can manage</p>
+                    </div>
+                </div>
+
+                <div id="formAlert" class="alert" style="display: none;"></div>
+
+                <form id="ruleForm" class="rule-form">
+                    <input type="hidden" id="ruleId">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ruleName">Rule Name</label>
+                            <input type="text" id="ruleName" placeholder="MINIMUM_CREDIT_SCORE" required>
+                            <small class="hint">Use uppercase snake_case naming (must be unique)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ruleType">Rule Type</label>
+                            <select id="ruleType" required>
+                                <option value="">Select a type</option>
+                                <option value="CREDIT_SCORE">CREDIT_SCORE</option>
+                                <option value="LOAN_AMOUNT">LOAN_AMOUNT</option>
+                                <option value="BUREAU_RESPONSE">BUREAU_RESPONSE</option>
+                                <option value="AGE_LIMIT">AGE_LIMIT</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thresholdValue">Threshold Value</label>
+                            <input type="number" step="0.01" id="thresholdValue" placeholder="650" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="operator">Operator</label>
+                            <select id="operator" required>
+                                <option value="">Select operator</option>
+                                <option value=">=">&gt;=</option>
+                                <option value="<=">&lt;=</option>
+                                <option value="==">==</option>
+                                <option value=">">&gt;</option>
+                                <option value="<">&lt;</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <input type="number" id="priority" min="1" placeholder="1" value="1" required>
+                            <small class="hint">Lower numbers run first</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="importance">Importance</label>
+                            <select id="importance" required>
+                                <option value="CRITICAL">CRITICAL</option>
+                                <option value="HIGH">HIGH</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="LOW">LOW</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="3" placeholder="Describe what this rule does..." required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="failureMessage">Failure Message (optional)</label>
+                        <textarea id="failureMessage" rows="2" placeholder="Message shown when the rule fails"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="left-actions">
+                            <label class="toggle">
+                                <input type="checkbox" id="enabled" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Enabled</span>
+                            </label>
+                        </div>
+                        <div class="right-actions">
+                            <button type="button" id="cancelEditBtn" class="btn-secondary" style="display: none;">Cancel</button>
+                            <button type="submit" class="btn-primary" id="submitBtn">Create Rule</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
