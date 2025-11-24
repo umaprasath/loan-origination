@@ -5,12 +5,15 @@ import com.loanorigination.common.dto.CreditRequest;
 import com.loanorigination.common.event.CreditBureauEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -20,10 +23,22 @@ public class ExperianService {
     
     private final WebClient.Builder webClientBuilder;
     private final KafkaTemplate<String, CreditBureauEvent> kafkaTemplate;
+    private Map<String, BigDecimal> configuredCreditScores;
     
-    public ExperianService(WebClient.Builder webClientBuilder, KafkaTemplate<String, CreditBureauEvent> kafkaTemplate) {
+    public ExperianService(
+            WebClient.Builder webClientBuilder, 
+            KafkaTemplate<String, CreditBureauEvent> kafkaTemplate) {
         this.webClientBuilder = webClientBuilder;
         this.kafkaTemplate = kafkaTemplate;
+        this.configuredCreditScores = new HashMap<>();
+    }
+    
+    @Value("#{${mock.credit-scores.experian:{}}}")
+    public void setConfiguredCreditScores(Map<String, Integer> scores) {
+        if (scores != null) {
+            scores.forEach((ssn, score) -> 
+                configuredCreditScores.put(ssn.replaceAll("[^0-9]", ""), new BigDecimal(score)));
+        }
     }
     
     // Mock Experian API URL - in production, this would be the actual Experian API endpoint
@@ -84,6 +99,16 @@ public class ExperianService {
     }
     
     private BigDecimal generateMockCreditScore(String ssn) {
+        // Normalize SSN (remove dashes and spaces)
+        String normalizedSsn = ssn.replaceAll("[^0-9]", "");
+        
+        // Check if there's a configured credit score for this SSN
+        if (configuredCreditScores.containsKey(normalizedSsn)) {
+            log.debug("Using configured credit score for SSN: {}", maskSsn(ssn));
+            return configuredCreditScores.get(normalizedSsn);
+        }
+        
+        // Fall back to hash-based generation
         // Mock credit score generation based on SSN hash
         // In production, this would come from the actual Experian API
         int hash = ssn.hashCode();

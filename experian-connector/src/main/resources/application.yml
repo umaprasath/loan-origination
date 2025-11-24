@@ -20,3 +20,14 @@ logging:
   level:
     com.loanorigination.experian: DEBUG
 
+# Mock Credit Score Configuration
+# Configure specific credit scores for specific SSNs for testing
+# Format: SSN (without dashes) -> credit score
+mock:
+  credit-scores:
+    experian:
+      # Example: "123456789": 750
+      # Add your test SSNs here
+      # "999887777": 650
+      # "111223333": 800
+
